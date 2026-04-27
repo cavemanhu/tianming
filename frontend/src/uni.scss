@@ -1,0 +1,291 @@
+/* 天命阁 - UniApp全局样式 */
+
+/* ==================== 1. 颜色变量 ==================== */
+$color-primary: #8B0000;
+$color-secondary: #1A1A2E;
+$color-accent: #FFD700;
+
+$color-success: #4CAF50;
+$color-warning: #FF9800;
+$color-error: #F44336;
+
+$color-bg-primary: #0D0D1A;
+$color-bg-secondary: #1A1A2E;
+$color-bg-card: #252540;
+$color-bg-hover: #2D2D4A;
+
+$color-text-primary: #FFFFFF;
+$color-text-secondary: #B8B8D0;
+$color-text-tertiary: #6B6B80;
+$color-text-disabled: #4A4A5A;
+
+$color-border: rgba(255, 215, 0, 0.15);
+$color-border-light: rgba(255, 255, 255, 0.1);
+
+/* ==================== 2. 字体变量 ==================== */
+$font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+$font-family-mono: 'SF Mono', 'Menlo', Monaco, monospace;
+
+$font-size-xs: 24rpx;
+$font-size-sm: 28rpx;
+$font-size-base: 32rpx;
+$font-size-lg: 36rpx;
+$font-size-xl: 44rpx;
+$font-size-xxl: 56rpx;
+$font-size-giant: 72rpx;
+
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$line-height-tight: 1.2;
+$line-height-normal: 1.5;
+$line-height-loose: 1.8;
+
+/* ==================== 3. 间距变量 ==================== */
+$spacing-unit: 4rpx;
+$spacing-xs: 8rpx;
+$spacing-sm: 12rpx;
+$spacing-base: 16rpx;
+$spacing-md: 24rpx;
+$spacing-lg: 32rpx;
+$spacing-xl: 48rpx;
+$spacing-xxl: 64rpx;
+
+$page-padding-h: 32rpx;
+$page-padding-v: 24rpx;
+
+/* ==================== 4. 圆角变量 ==================== */
+$border-radius-xs: 8rpx;
+$border-radius-sm: 12rpx;
+$border-radius-base: 16rpx;
+$border-radius-lg: 24rpx;
+$border-radius-xl: 32rpx;
+$border-radius-full: 9999rpx;
+
+/* ==================== 5. 阴影变量 ==================== */
+$shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+$shadow-base: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+$shadow-lg: 0 8rpx 32rpx rgba(0, 0, 0, 0.25);
+$shadow-glow-gold: 0 0 20rpx rgba(255, 215, 0, 0.3);
+$shadow-glow-red: 0 0 20rpx rgba(139, 0, 0, 0.3);
+
+/* ==================== 6. 动画变量 ==================== */
+$transition-fast: 150ms ease-out;
+$transition-normal: 300ms ease-out;
+$transition-slow: 500ms ease-out;
+
+$ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+$ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+/* ==================== 7. 按钮变量 ==================== */
+$btn-height-sm: 64rpx;
+$btn-height-base: 88rpx;
+$btn-height-lg: 96rpx;
+$btn-padding-h: 32rpx;
+
+/* ==================== 8. 输入框变量 ==================== */
+$input-height: 88rpx;
+$input-padding: 24rpx;
+$input-border-radius: $border-radius-base;
+
+/* ==================== 9. 卡片变量 ==================== */
+$card-padding: 24rpx;
+$card-radius: $border-radius-base;
+$card-bg: $color-bg-card;
+$card-border: 1rpx solid $color-border;
+
+/* ==================== 10. 五行颜色 ==================== */
+$wuxing-jin: #FFD700;
+$wuxing-mu: #4CAF50;
+$wuxing-shui: #2196F3;
+$wuxing-huo: #F44336;
+$wuxing-tu: #8B4513;
+
+/* ==================== 11. 命格等级颜色 ==================== */
+$level-1: #FFD700;
+$level-2: #90EE90;
+$level-3: #87CEEB;
+$level-4: #D3D3D3;
+$level-5: #B22222;
+
+/* ==================== 12. 全局重置 ==================== */
+page {
+  background-color: $color-bg-primary;
+  color: $color-text-primary;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-normal;
+}
+
+view, text {
+  box-sizing: border-box;
+}
+
+/* ==================== 13. 通用工具类 ==================== */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-center { justify-content: center; align-items: center; }
+.flex-between { justify-content: space-between; }
+.flex-around { justify-content: space-around; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1; }
+
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-primary { color: $color-text-primary; }
+.text-secondary { color: $color-text-secondary; }
+.text-tertiary { color: $color-text-tertiary; }
+.text-accent { color: $color-accent; }
+.text-error { color: $color-error; }
+
+.bg-primary { background-color: $color-bg-primary; }
+.bg-secondary { background-color: $color-bg-secondary; }
+.bg-card { background-color: $color-bg-card; }
+
+.mt-xs { margin-top: $spacing-xs; }
+.mt-sm { margin-top: $spacing-sm; }
+.mt-base { margin-top: $spacing-base; }
+.mt-md { margin-top: $spacing-md; }
+.mt-lg { margin-top: $spacing-lg; }
+.mt-xl { margin-top: $spacing-xl; }
+
+.mb-xs { margin-bottom: $spacing-xs; }
+.mb-sm { margin-bottom: $spacing-sm; }
+.mb-base { margin-bottom: $spacing-base; }
+.mb-md { margin-bottom: $spacing-md; }
+.mb-lg { margin-bottom: $spacing-lg; }
+.mb-xl { margin-bottom: $spacing-xl; }
+
+.pt-xs { padding-top: $spacing-xs; }
+.pt-sm { padding-top: $spacing-sm; }
+.pt-base { padding-top: $spacing-base; }
+.pt-md { padding-top: $spacing-md; }
+.pt-lg { padding-top: $spacing-lg; }
+
+.pb-xs { padding-bottom: $spacing-xs; }
+.pb-sm { padding-bottom: $spacing-sm; }
+.pb-base { padding-bottom: $spacing-base; }
+.pb-md { padding-bottom: $spacing-md; }
+.pb-lg { padding-bottom: $spacing-lg; }
+
+.px-base { padding-left: $page-padding-h; padding-right: $page-padding-h; }
+.py-base { padding-top: $page-padding-v; padding-bottom: $page-padding-v; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+/* ==================== 14. 页面容器 ==================== */
+.page-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, $color-bg-secondary 0%, $color-bg-primary 100%);
+  padding: 0 $page-padding-h;
+}
+
+/* ==================== 15. 按钮样式 ==================== */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: $btn-height-base;
+  border-radius: $border-radius-lg;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  transition: all $transition-fast;
+  
+  &::after { border: none; }
+  
+  &:active {
+    transform: scale(0.96);
+    opacity: 0.8;
+  }
+  
+  &.btn-disabled {
+    opacity: 0.5;
+    &:active { transform: none; }
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, $color-accent 0%, #FFA500 100%);
+  color: #000;
+  font-weight: $font-weight-bold;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1rpx solid $color-border;
+  color: $color-accent;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: $color-text-secondary;
+}
+
+/* ==================== 16. 输入框样式 ==================== */
+.input {
+  height: $input-height;
+  padding: 0 $input-padding;
+  background: transparent;
+  border: 1rpx solid $color-border-light;
+  border-radius: $input-border-radius;
+  color: $color-text-primary;
+  font-size: $font-size-base;
+  transition: border-color $transition-fast;
+  
+  &::placeholder {
+    color: $color-text-tertiary;
+  }
+  
+  &:focus {
+    border-color: $color-accent;
+    box-shadow: $shadow-glow-gold;
+  }
+  
+  &.input-error {
+    border-color: $color-error;
+  }
+}
+
+/* ==================== 17. 卡片样式 ==================== */
+.card {
+  background: $card-bg;
+  border-radius: $card-radius;
+  padding: $card-padding;
+  border: $card-border;
+}
+
+/* ==================== 18. 动画 ==================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30rpx); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-fade-in { animation: fadeIn 0.3s ease-out; }
+.animate-slide-up { animation: slideUp 0.3s ease-out; }
+.animate-spin { animation: spin 1s linear infinite; }
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }

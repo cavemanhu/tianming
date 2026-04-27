@@ -1,0 +1,160 @@
+/**
+ * 天命阁 - UI设计规范
+ * 版本: v1.0
+ * 日期: 2026-04-24
+ */
+
+// ==================== 1. 颜色系统 ====================
+$color-primary: #8B0000;        // 深红 - 主色调，权威、喜庆
+$color-secondary: #1A1A2E;      // 墨蓝 - 辅助色，沉稳、神秘
+$color-accent: #FFD700;        // 金色 - 强调色，尊贵、财富
+
+// 功能色
+$color-success: #4CAF50;        // 绿色 - 好运
+$color-warning: #FF9800;        // 橙色 - 注意
+$color-error: #F44336;          // 红色 - 警示
+
+// 背景色
+$color-bg-primary: #0D0D1A;     // 主背景 - 极深蓝黑
+$color-bg-secondary: #1A1A2E;   // 次背景 - 深蓝黑
+$color-bg-card: #252540;        // 卡片背景 - 浅蓝黑
+$color-bg-hover: #2D2D4A;       // 悬浮背景
+
+// 文字色
+$color-text-primary: #FFFFFF;   // 主文字 - 纯白
+$color-text-secondary: #B8B8D0;  // 次文字 - 灰白
+$color-text-tertiary: #6B6B80;   // 弱化文字 - 深灰
+$color-text-disabled: #4A4A5A;   // 禁用文字
+
+// 边框色
+$color-border: rgba(#FFD700, 0.15);    // 默认边框 - 金色15%透明
+$color-border-light: rgba(#FFFFFF, 0.1);  // 浅边框
+
+// ==================== 2. 渐变色 ====================
+$gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);   // 金色渐变
+$gradient-red: linear-gradient(135deg, #8B0000 0%, #B22222 100%);     // 红色渐变
+$gradient-blue: linear-gradient(180deg, #1A1A2E 0%, #0D0D1A 100%);   // 蓝色渐变
+$gradient-card: linear-gradient(180deg, #252540 0%, #1A1A2E 100%);   // 卡片渐变
+
+// ==================== 3. 字体系统 ====================
+$font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+$font-family-mono: 'SF Mono', 'Menlo', Monaco, monospace;
+
+// 字号 (使用rpx适配不同屏幕)
+$font-size-xs: 24rpx;     // 辅助说明
+$font-size-sm: 28rpx;     // 次要信息、标签
+$font-size-base: 32rpx;   // 正文
+$font-size-lg: 36rpx;     // 小标题
+$font-size-xl: 44rpx;     // 大标题
+$font-size-xxl: 56rpx;    // 数字/强调
+$font-size-giant: 72rpx;   // 超大数字
+
+// 字重
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// 行高
+$line-height-tight: 1.2;    // 紧凑 - 标题
+$line-height-normal: 1.5;   // 正常 - 正文
+$line-height-loose: 1.8;    // 宽松 - 说明文字
+
+// ==================== 4. 间距系统 ====================
+$spacing-unit: 4rpx;   // 基础单位
+
+$spacing-xs: 8rpx;     // 4*2  - 元素内紧凑间距
+$spacing-sm: 12rpx;    // 4*3  - 元素内标准间距
+$spacing-base: 16rpx;  // 4*4  - 页面内元素间距
+$spacing-md: 24rpx;    // 4*6  - 区块内间距
+$spacing-lg: 32rpx;    // 4*8  - 区块间间距
+$spacing-xl: 48rpx;    // 4*12 - 大区块间距
+$spacing-xxl: 64rpx;   // 4*16 - 页面级间距
+
+// 页面边距
+$page-padding-h: 32rpx;     // 页面左右边距
+$page-padding-v: 24rpx;    // 页面上下边距
+
+// ==================== 5. 圆角系统 ====================
+$border-radius-xs: 8rpx;     // 小圆角 - 标签、小按钮
+$border-radius-sm: 12rpx;   // 标准圆角 - 小卡片
+$border-radius-base: 16rpx;  // 中等圆角 - 卡片
+$border-radius-lg: 24rpx;   // 大圆角 - 大卡片、弹窗
+$border-radius-xl: 32rpx;   // 特大圆角 - 特殊卡片
+$border-radius-full: 9999rpx;  // 圆形 - 头像、徽章
+
+// ==================== 6. 阴影系统 ====================
+$shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+$shadow-base: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+$shadow-lg: 0 8rpx 32rpx rgba(0, 0, 0, 0.25);
+$shadow-glow-gold: 0 0 20rpx rgba(#FFD700, 0.3);   // 金色发光
+$shadow-glow-red: 0 0 20rpx rgba(#8B0000, 0.3);    // 红色发光
+
+// ==================== 7. 动画系统 ====================
+$transition-fast: 150ms ease-out;     // 快速 - hover反馈
+$transition-normal: 300ms ease-out;  // 正常 - 状态变化
+$transition-slow: 500ms ease-out;     // 慢速 - 页面切换
+
+// 动画时长
+$duration-fast: 150ms;
+$duration-normal: 300ms;
+$duration-slow: 500ms;
+
+// 缓动函数
+$ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+$ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+// ==================== 8. 图标规范 ====================
+$icon-size-xs: 32rpx;     // 小图标
+$icon-size-sm: 40rpx;     // 标准小图标
+$icon-size-base: 48rpx;   // 中等图标
+$icon-size-lg: 64rpx;     // 大图标
+$icon-size-xl: 80rpx;     // 特大图标
+
+$icon-stroke-width: 2rpx;  // 描边宽度
+$icon-color: $color-accent;  // 默认颜色
+
+// ==================== 9. Z-Index层级 ====================
+$z-index-dropdown: 100;
+$z-index-sticky: 200;
+$z-index-fixed: 300;
+$z-index-modal-backdrop: 400;
+$z-index-modal: 500;
+$z-index-popover: 600;
+$z-index-tooltip: 700;
+$z-index-toast: 800;
+
+// ==================== 10. 组件规范 ====================
+
+// 按钮
+$btn-height-sm: 64rpx;     // 小按钮
+$btn-height-base: 88rpx;   // 标准按钮
+$btn-height-lg: 96rpx;    // 大按钮
+$btn-padding-h: 32rpx;    // 按钮左右内边距
+
+// 输入框
+$input-height: 88rpx;
+$input-padding: 24rpx;
+$input-border-radius: $border-radius-base;
+
+// 卡片
+$card-padding: 24rpx;
+$card-radius: $border-radius-base;
+$card-bg: $color-bg-card;
+$card-border: 1rpx solid $color-border;
+
+// ==================== 11. 五行颜色 ====================
+$wuxing-jin: #FFD700;    // 金 - 金色
+$wuxing-mu: #4CAF50;     // 木 - 绿色
+$wuxing-shui: #2196F3;   // 水 - 蓝色
+$wuxing-huo: #F44336;    // 火 - 红色
+$wuxing-tu: #8B4513;     // 土 - 棕色
+
+// ==================== 12. 命格等级颜色 ====================
+$level-1: #FFD700;    // 大吉 - 金色
+$level-2: #90EE90;   // 吉 - 浅绿
+$level-3: #87CEEB;   // 中 - 天蓝
+$level-4: #D3D3D3;   // 平 - 浅灰
+$level-5: #B22222;   // 凶 - 深红

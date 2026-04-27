@@ -1,0 +1,23 @@
+{
+  "name": "tianming-app",
+  "version": "1.0.0",
+  "description": "天命阁 - 命运预测小程序",
+  "main": "main.js",
+  "scripts": {
+    "dev:mp-weixin": "vite build --mode mp-weixin",
+    "build:mp-weixin": "vite build --mode mp-weixin",
+    "dev:h5": "vite --host 0.0.0.0 --port 8080",
+    "build:h5": "vite build"
+  },
+  "dependencies": {
+    "pinia": "^2.1.7",
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "@dcloudio/uni-components": "3.0.0-alpha-5000820260420001",
+    "@dcloudio/uni-mp-weixin": "3.0.0-alpha-5000820260420001",
+    "@dcloudio/vite-plugin-uni": "3.0.0-alpha-5000820260420001",
+    "sass": "^1.75.0",
+    "vite": "^5.2.8"
+  }
+}
