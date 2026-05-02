@@ -5,8 +5,10 @@
 
 import { getToken, clearToken } from './auth'
 
-// API基础地址 (本地后端)
-const BASE_URL = 'http://localhost:3000'
+// API基础地址 (本地后端) - 支持环境变量切换
+const BASE_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE_URL) 
+  ? import.meta.env.VITE_API_BASE_URL 
+  : 'http://localhost:3000'
 
 // 请求超时时间 (ms)
 const TIMEOUT = 30000
