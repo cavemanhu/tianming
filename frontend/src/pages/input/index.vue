@@ -165,6 +165,7 @@ import BaziDisplay from '@/components/BaziDisplay/BaziDisplay.vue'
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker.vue'
 import TimePickerModal from '@/components/TimePickerModal/TimePickerModal.vue'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner.vue'
+import { useFortuneStore } from '@/store/fortune'
 
 export default {
   components: {
@@ -300,30 +301,86 @@ export default {
     async startPredict() {
       if (!this.canPredict) return
       
+      const fortuneStore = useFortuneStore()
       this.isLoading = true
       
       try {
-        // TODO: 调用后端API
-        // const res = await predictApi({
-        //   type: this.selectedType,
-        //   birthDate: this.birthDate,
-        //   birthTime: this.birthTime,
-        //   gender: this.gender,
-        //   partnerBirthDate: this.partnerBirthDate,
-        //   partnerBirthTime: this.partnerBirthTime
-        // })
+        // 解析出生日期和时间
+        const [birth_year, birth_month, birth_day] = this.birthDate.split('-').map(Number)
+        const birth_hour = this.parseHour(this.birthTime)
         
-        // 模拟延迟
-        await new Promise(resolve => setTimeout(resolve, 2000))
+        // 准备API参数
+        const params = {
+          fate_type: this.selectedType,
+          birth_year,
+          birth_month,
+          birth_day,
+          birth_hour,
+          gender: this.gender === 'male' ? 1 : 0
+        }
         
-        uni.navigateTo({
-          url: `/pages/fortune/index?type=${this.selectedType}&mode=predict`
-        })
+        // 如果是姻缘类型，添加对方信息
+        if (this.selectedType === 'love' && this.partnerBirthDate && this.partnerBirthTime) {
+          const [p_year, p_month, p_day] = this.partnerBirthDate.split('-').map(Number)
+          params.partner_birth = {
+            birth_year: p_year,
+            birth_month: p_month,
+            birth_day: p_day,
+            birth_hour: this.parseHour(this.partnerBirthTime)
+          }
+        }
+        
+        // 调用后端API创建任务
+        const res = await fortuneStore.doPredict(this.selectedType, params)
+        
+        // 轮询结果（最多等待60秒）
+        if (res && res.task_id) {
+          let result = null
+          for (let i = 0; i < 60; i++) {
+            await new Promise(r => setTimeout(r, 1000))
+            const r = await fortuneStore.fetchResult(res.task_id)
+            if (r && r.task_status === 'completed') {
+              result = r.result_data
+              break
+            }
+            if (r && r.task_status === 'failed') {
+              throw new Error(r.error_msg || '测算失败')
+            }
+          }
+          
+          if (result) {
+            fortuneStore.currentResult = result
+            uni.navigateTo({
+              url: `/pages/fortune/index?type=${this.selectedType}&mode=predict`
+            })
+          } else {
+            throw new Error('测算超时，请稍后重试')
+          }
+        } else {
+          uni.navigateTo({
+            url: `/pages/fortune/index?type=${this.selectedType}&mode=predict`
+          })
+        }
       } catch (e) {
-        uni.showToast({ title: '测算失败', icon: 'none' })
+        console.error('Predict error:', e)
+        uni.showToast({ title: e.message || '测算失败', icon: 'none' })
       } finally {
         this.isLoading = false
       }
+    },
+    
+    parseHour(timeStr) {
+      const hourMap = {
+        '子时': 0, '丑时': 1, '寅时': 3, '卯时': 5,
+        '辰时': 7, '巳时': 9, '午时': 11, '未时': 13,
+        '申时': 15, '酉时': 17, '戌时': 19, '亥时': 21
+      }
+      const match = timeStr.match(/(\d{1,2})时/)
+      if (match) return parseInt(match[1])
+      for (const [key, val] of Object.entries(hourMap)) {
+        if (timeStr.includes(key)) return val
+      }
+      return 0
     }
   }
 }
