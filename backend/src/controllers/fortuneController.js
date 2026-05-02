@@ -4,6 +4,9 @@
 
 const { success, error, CODE } = require('../utils/response');
 const { generateTaskId } = require('../utils/codeGen');
+const asyncTaskService = require('../services/asyncTaskService');
+const baziService = require('../services/baziService');
+const FortuneRecordModel = require('../models/FortuneRecord');
 
 /**
  * 获取算命记录列表
@@ -11,12 +14,13 @@ const { generateTaskId } = require('../utils/codeGen');
 async function getRecords(req, res) {
   try {
     const { page = 1, pageSize = 20, fate_type } = req.query;
-    // const records = await FortuneRecordModel.findByUser(req.userId, { page, pageSize, fate_type });
-    res.json(success({
-      list: [],
-      pagination: { page: Number(page), pageSize: Number(pageSize), total: 0 }
-    }));
+    const userId = req.userId || 1; // 测试用，实际从auth中间件获取
+    
+    const result = await FortuneRecordModel.findByUser(userId, { page, pageSize, fateType: fate_type || null });
+    
+    res.json(success(result));
   } catch (err) {
+    console.error('getRecords error:', err);
     res.status(500).json(error(CODE.SERVER_ERROR, '获取记录失败'));
   }
 }
@@ -26,18 +30,65 @@ async function getRecords(req, res) {
  */
 async function createTask(req, res) {
   try {
-    const { fate_type, input_data } = req.body;
+    const { fate_type, birth_year, birth_month, birth_day, birth_hour, gender, partner_birth } = req.body;
     
-    if (!fate_type || !input_data) {
+    if (!fate_type || !birth_year || !birth_month || !birth_day) {
       return res.status(400).json(error(CODE.BAD_REQUEST, '参数不完整'));
     }
 
-    const taskId = generateTaskId();
-    // 创建异步任务记录
-    // const task = await AsyncTaskModel.create({ task_id: taskId, user_id: req.userId, task_type: 'fortune', input_data });
-    
-    res.json(success({ task_id: taskId }));
+    const userId = req.userId || 1; // 测试用
+    const inputData = {
+      fate_type,
+      birth_year,
+      birth_month,
+      birth_day,
+      birth_hour: birth_hour || 0,
+      gender: gender || 0,
+      partner_birth: partner_birth || null
+    };
+
+    // 使用异步任务服务创建任务
+    const { taskId, status } = await asyncTaskService.createTask({
+      userId,
+      taskType: 'fortune',
+      inputData
+    });
+
+    // 注册处理函数
+    asyncTaskService.registerHandler('fortune', async (input, ctx) => {
+      const { birth_year, birth_month, birth_day, birth_hour, gender, fate_type } = input;
+      
+      // 调用八字服务计算
+      const bazi = baziService.calculateBazi(birth_year, birth_month, birth_day, birth_hour);
+      
+      // 模拟运势分析（实际应调用fortuneAnalysisService）
+      const result = {
+        bazi,
+        score: Math.floor(Math.random() * 30) + 70,
+        level: 3,
+        levelName: '中吉',
+        summary: '流年运势平稳，需要把握时机',
+        wuxing: { jin: 20, mu: 25, shui: 20, huo: 15, tu: 20 },
+        luckyMonth: '三月',
+        unluckyMonth: '九月'
+      };
+      
+      // 保存记录
+      await FortuneRecordModel.create({
+        userId: ctx.userId,
+        fateType: fate_type || 'bazi',
+        inputData: input,
+        resultData: result,
+        gemsCost: 0,
+        fateLevel: result.level >= 4 ? 'great' : result.level >= 2 ? 'good' : 'normal'
+      });
+      
+      return result;
+    });
+
+    res.json(success({ task_id: taskId, status }));
   } catch (err) {
+    console.error('createTask error:', err);
     res.status(500).json(error(CODE.SERVER_ERROR, '创建任务失败'));
   }
 }
@@ -48,16 +99,51 @@ async function createTask(req, res) {
 async function getResult(req, res) {
   try {
     const { task_id } = req.params;
-    // const task = await AsyncTaskModel.findByTaskId(task_id);
-    const task = {
-      task_id,
-      task_status: 'completed',
-      result_data: { message: '算命结果' }
-    };
-    res.json(success(task));
+    const userId = req.userId || 1;
+    
+    const task = await asyncTaskService.getTaskStatus(task_id, userId);
+    
+    if (!task) {
+      return res.status(404).json(error(CODE.NOT_FOUND, '任务不存在'));
+    }
+    
+    res.json(success({
+      task_id: task.taskId,
+      task_status: task.status,
+      progress: task.progress,
+      result_data: task.resultData,
+      error_msg: task.errorMsg
+    }));
   } catch (err) {
+    console.error('getResult error:', err);
     res.status(500).json(error(CODE.SERVER_ERROR, '查询失败'));
   }
 }
 
-module.exports = { getRecords, createTask, getResult };
+/**
+ * 获取单条记录详情
+ */
+async function getRecordById(req, res) {
+  try {
+    const { id } = req.params;
+    const userId = req.userId || 1;
+    
+    const record = await FortuneRecordModel.findById(id, userId);
+    
+    if (!record) {
+      return res.status(404).json(error(CODE.NOT_FOUND, '记录不存在'));
+    }
+    
+    res.json(success(record));
+  } catch (err) {
+    console.error('getRecordById error:', err);
+    res.status(500).json(error(CODE.SERVER_ERROR, '查询失败'));
+  }
+}
+
+module.exports = {
+  getRecords,
+  createTask,
+  getResult,
+  getRecordById
+};
