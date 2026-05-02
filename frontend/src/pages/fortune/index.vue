@@ -169,31 +169,7 @@ export default {
       displayScore: 0,
       showSuccessModal: false,
       
-      result: {
-        id: '',
-        type: 'year',
-        title: '2026年运势',
-        score: 88,
-        level: 1,
-        levelName: '大吉',
-        summary: '2026年整体运势良好事业发展顺利',
-        details: '在新的一年里，您的运势呈现出稳步上升的趋势。事业方面，工作进展顺利，有晋升机会。财运方面，正财稳定，偏财小有收获。感情方面，已婚者感情和睦，未婚者有桃花运。健康方面需要注意肝胆问题。',
-        bazi: {
-          year: { tiangan: '丙', dizhi: '子', wuxing: '水' },
-          month: { tiangan: '辛', dizhi: '丑', wuxing: '金' },
-          day: { tiangan: '壬', dizhi: '午', wuxing: '火' },
-          time: { tiangan: '戊', dizhi: '申', wuxing: '金' }
-        },
-        wuxing: {
-          jin: 25,
-          mu: 15,
-          shui: 30,
-          huo: 15,
-          tu: 15
-        },
-        luckyMonth: '三月',
-        unluckyMonth: '九月'
-      }
+      result: {}
     }
   },
   
@@ -229,8 +205,51 @@ export default {
   
   methods: {
     async loadResult(options) {
-      // 模拟加载
-      await new Promise(resolve => setTimeout(resolve, 500))
+      const fortuneStore = useFortuneStore()
+      
+      // 从store获取结果（从input页面跳转过来）
+      if (fortuneStore.currentResult) {
+        this.result = fortuneStore.currentResult
+        this.updateDisplayScore()
+        return
+      }
+      
+      // 如果有task_id参数，调用API获取结果
+      if (options.id || options.task_id) {
+        const taskId = options.id || options.task_id
+        try {
+          await fortuneStore.fetchResult(taskId)
+          if (fortuneStore.currentResult) {
+            this.result = fortuneStore.currentResult
+            this.updateDisplayScore()
+          }
+        } catch (e) {
+          console.error('Load result error:', e)
+          uni.showToast({ title: '获取结果失败', icon: 'none' })
+        }
+        return
+      }
+      
+      // 如果是predict模式但没有结果，显示空状态
+      if (options.mode === 'predict' && !fortuneStore.currentResult) {
+        this.result = { title: '命格详情', type: options.type || 'year' }
+      }
+    },
+    
+    updateDisplayScore() {
+      // 动画更新分数
+      const targetScore = this.result.score || 0
+      let current = 0
+      const step = targetScore / 30
+      const timer = setInterval(() => {
+        current += step
+        if (current >= targetScore) {
+          this.displayScore = targetScore
+          clearInterval(timer)
+        } else {
+          this.displayScore = Math.floor(current)
+        }
+      }, 30)
     },
     
     playEntryAnimations() {
