@@ -199,11 +199,30 @@ export default {
       this.userStore.checkLogin()
     },
     
-    loadUserStats() {
-      // TODO: 从后端获取用户统计
-      const cached = uni.getStorageSync('user_stats')
-      if (cached) {
-        this.stats = cached
+    async loadUserStats() {
+      try {
+        // 从用户信息获取基本统计
+        const userStore = useUserStore()
+        if (userStore.isLogin) {
+          const { getUserInfo } = require('@/services/user')
+          const res = await getUserInfo()
+          if (res.code === 0 && res.data) {
+            this.stats = {
+              predictCount: res.data.predict_count || 0,
+              inviteCount: res.data.invite_count || 0,
+              freeCount: res.data.free_count || 0
+            }
+            // 缓存
+            uni.setStorageSync('user_stats', this.stats)
+          }
+        }
+      } catch (e) {
+        console.error('Load user stats failed:', e)
+        // 使用缓存
+        const cached = uni.getStorageSync('user_stats')
+        if (cached) {
+          this.stats = cached
+        }
       }
     },
     
