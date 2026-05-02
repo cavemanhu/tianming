@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>天命阁 - 命运预测</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0D0D1A 0%, #1A1A2E 50%, #16213E 100%);
+      min-height: 100vh;
+      color: #F5F5F5;
+    }
+    .container { max-width: 480px; margin: 0 auto; padding: 20px; min-height: 100vh; }
+    .header { text-align: center; padding: 40px 0 30px; }
+    .logo { font-size: 48px; margin-bottom: 10px; }
+    .title { font-size: 28px; color: #FFD700; font-weight: bold; text-shadow: 0 0 20px rgba(255,215,0,0.3); }
+    .subtitle { color: #888; font-size: 14px; margin-top: 5px; }
+    .fortune-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,215,0,0.2);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 20px 0;
+      backdrop-filter: blur(10px);
+    }
+    .card-title { font-size: 18px; color: #FFD700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .bazi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 16px 0; }
+    .bazi-item { text-align: center; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px; }
+    .bazi-label { font-size: 11px; color: #888; margin-bottom: 4px; }
+    .bazi-value { font-size: 18px; color: #FFD700; font-weight: bold; }
+    .wx-item { font-size: 14px; color: #FFF; }
+    .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 8px 0; }
+    .btn-primary { background: linear-gradient(135deg, #8B0000, #CD5C5C); color: #FFD700; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(139,0,0,0.4); }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); }
+    .input-group { margin: 16px 0; }
+    .input-label { font-size: 14px; color: #888; margin-bottom: 6px; display: block; }
+    .input { width: 100%; padding: 12px 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; background: rgba(255,255,255,0.05); color: #FFF; font-size: 16px; }
+    .input:focus { outline: none; border-color: #FFD700; }
+    .result-section { display: none; margin-top: 20px; }
+    .result-section.active { display: block; }
+    .interpretation { background: rgba(255,215,0,0.05); border-left: 3px solid #FFD700; padding: 12px 16px; margin: 10px 0; border-radius: 0 8px 8px 0; }
+    .interpretation-type { font-size: 12px; color: #FFD700; margin-bottom: 4px; }
+    .interpretation-text { font-size: 14px; line-height: 1.6; color: #CCC; }
+    .tab-bar { display: flex; background: rgba(26,26,46,0.95); border-top: 1px solid rgba(255,255,255,0.1); position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; }
+    .tab-item { flex: 1; text-align: center; padding: 12px; color: #6B6B80; font-size: 12px; cursor: pointer; }
+    .tab-item.active { color: #FFD700; }
+    .tab-icon { font-size: 20px; margin-bottom: 4px; }
+    .loading { text-align: center; padding: 40px; color: #FFD700; }
+    .loading::after { content: '...'; animation: dots 1.5s infinite; }
+    @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} }
+    .yinyuan-result { text-align: center; }
+    .yinyuan-score { font-size: 64px; color: #FFD700; font-weight: bold; margin: 20px 0; }
+    .yinyuan-level { font-size: 20px; color: #FF6B6B; margin-bottom: 16px; }
+    .yinyuan-advice { color: #AAA; line-height: 1.8; text-align: left; }
+    .nav-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+    .nav-btn { flex: 1; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #888; font-size: 13px; text-align: center; cursor: pointer; }
+    .nav-btn.active { background: rgba(139,0,0,0.3); border-color: #8B0000; color: #FFD700; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .history-item { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 16px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+    .history-type { color: #FFD700; font-size: 14px; }
+    .history-date { color: #666; font-size: 12px; margin-top: 4px; }
+    .profile-card { text-align: center; padding: 30px; }
+    .profile-avatar { font-size: 64px; margin-bottom: 16px; }
+    .profile-level { display: inline-block; background: linear-gradient(135deg, #8B0000, #CD5C5C); padding: 4px 16px; border-radius: 20px; font-size: 12px; color: #FFD700; margin-top: 10px; }
+    .stats { display: flex; gap: 10px; margin: 20px 0; }
+    .stat-item { flex: 1; background: rgba(255,255,255,0.03); border-radius: 10px; padding: 16px; text-align: center; }
+    .stat-value { font-size: 24px; color: #FFD700; font-weight: bold; }
+    .stat-label { font-size: 12px; color: #888; margin-top: 4px; }
+    .invite-banner { background: linear-gradient(135deg, rgba(139,0,0,0.5), rgba(205,92,92,0.3)); border: 1px solid rgba(255,215,0,0.3); border-radius: 12px; padding: 20px; text-align: center; margin: 20px 0; }
+    .invite-title { color: #FFD700; font-size: 16px; margin-bottom: 8px; }
+    .invite-desc { color: #AAA; font-size: 13px; margin-bottom: 16px; }
+    .tab-content { padding-bottom: 80px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 首页 Tab -->
+    <div id="page-home" class="page active">
+      <div class="header">
+        <div class="logo">🏛️</div>
+        <div class="title">天命阁</div>
+        <div class="subtitle">知命 · 改运 · 趋吉避凶</div>
+      </div>
+      
+      <div class="nav-bar">
+        <div class="nav-btn active" onclick="switchNav('bazi')">🧭 八字算命</div>
+        <div class="nav-btn" onclick="switchNav('yinyuan')">💕 姻缘配对</div>
+      </div>
+      
+      <!-- 八字算命 -->
+      <div id="section-bazi">
+        <div class="fortune-card">
+          <div class="card-title">🧭 八字排盘</div>
+          <div class="input-group">
+            <label class="input-label">姓名</label>
+            <input class="input" type="text" id="bazi-name" placeholder="请输入姓名" value="测试用户">
+          </div>
+          <div class="input-group">
+            <label class="input-label">性别</label>
+            <select class="input" id="bazi-gender">
+              <option value="男">男</option>
+              <option value="女">女</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label class="input-label">出生年份</label>
+            <input class="input" type="number" id="bazi-year" placeholder="如：1990" value="1990">
+          </div>
+          <div class="input-group">
+            <label class="input-label">出生月份</label>
+            <input class="input" type="number" id="bazi-month" placeholder="1-12" min="1" max="12" value="6">
+          </div>
+          <div class="input-group">
+            <label class="input-label">出生日期</label>
+            <input class="input" type="number" id="bazi-day" placeholder="1-31" min="1" max="31" value="15">
+          </div>
+          <div class="input-group">
+            <label class="input-label">出生时辰（小时 0-23）</label>
+            <input class="input" type="number" id="bazi-hour" placeholder="0-23" min="0" max="23" value="10">
+          </div>
+          <button class="btn btn-primary" onclick="calcBazi()">🔮 开始算命</button>
+        </div>
+        
+        <div id="bazi-result" class="result-section">
+          <div class="fortune-card">
+            <div class="card-title">📜 命格分析</div>
+            <div class="bazi-grid">
+              <div class="bazi-item"><div class="bazi-label">年柱</div><div class="bazi-value" id="res-nianzhu">-</div></div>
+              <div class="bazi-item"><div class="bazi-label">月柱</div><div class="bazi-value" id="res-yuezhu">-</div></div>
+              <div class="bazi-item"><div class="bazi-label">日柱</div><div class="bazi-value" id="res-rizhu">-</div></div>
+              <div class="bazi-item"><div class="bazi-label">时柱</div><div class="bazi-value" id="res-shizhu">-</div></div>
+            </div>
+            <div style="display:flex; justify-content:space-around; margin: 10px 0;">
+              <div class="wx-item">木: <span id="wx-mu">-</span>分</div>
+              <div class="wx-item">火: <span id="wx-huo">-</span>分</div>
+              <div class="wx-item">土: <span id="wx-tu">-</span>分</div>
+              <div class="wx-item">金: <span id="wx-jin">-</span>分</div>
+              <div class="wx-item">水: <span id="wx-shui">-</span>分</div>
+            </div>
+            <div id="bazi-interpretations"></div>
+            <button class="btn btn-secondary" onclick="shareResult()">📤 分享结果</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 姻缘配对 -->
+      <div id="section-yinyuan" style="display:none;">
+        <div class="fortune-card">
+          <div class="card-title">💕 姻缘配对</div>
+          <div style="font-size:13px; color:#888; margin-bottom:16px;">填写双方信息，查看缘分指数</div>
+          <div style="background:rgba(255,255,255,0.03); border-radius:10px; padding:16px; margin-bottom:16px;">
+            <div style="color:#FFD700; margin-bottom:12px;">甲方信息</div>
+            <div class="input-group">
+              <label class="input-label">甲方姓名</label>
+              <input class="input" type="text" id="yin-a-name" placeholder="甲方姓名" value="张三">
+            </div>
+            <div class="input-group">
+              <label class="input-label">甲方生肖</label>
+              <select class="input" id="yin-a-zodiac">
+                <option value="子">子（鼠）</option><option value="丑">丑（牛）</option>
+                <option value="寅">寅（虎）</option><option value="卯">卯（兔）</option>
+                <option value="辰">辰（龙）</option><option value="巳">巳（蛇）</option>
+                <option value="午">午（马）</option><option value="未">未（羊）</option>
+                <option value="申">申（猴）</option><option value="酉">酉（鸡）</option>
+                <option value="戌">戌（狗）</option><option value="亥">亥（猪）</option>
+              </select>
+            </div>
+          </div>
+          <div style="text-align:center; margin:10px 0; color:#FFD700;">❤️ VS ❤️</div>
+          <div style="background:rgba(255,255,255,0.03); border-radius:10px; padding:16px;">
+            <div style="color:#FFD700; margin-bottom:12px;">乙方信息</div>
+            <div class="input-group">
+              <label class="input-label">乙方姓名</label>
+              <input class="input" type="text" id="yin-b-name" placeholder="乙方姓名" value="李四">
+            </div>
+            <div class="input-group">
+              <label class="input-label">乙方生肖</label>
+              <select class="input" id="yin-b-zodiac">
+                <option value="子">子（鼠）</option><option value="丑">丑（牛）</option>
+                <option value="寅">寅（虎）</option><option value="卯">卯（兔）</option>
+                <option value="辰">辰（龙）</option><option value="巳">巳（蛇）</option>
+                <option value="午">午（马）</option><option value="未">未（羊）</option>
+                <option value="申">申（猴）</option><option value="酉">酉（鸡）</option>
+                <option value="戌">戌（狗）</option><option value="亥">亥（猪）</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcYinyuan()" style="margin-top:16px;">💕 测试姻缘</button>
+        </div>
+        
+        <div id="yinyuan-result" class="result-section">
+          <div class="fortune-card yinyuan-result">
+            <div class="card-title" style="justify-content:center;">💕 姻缘结果</div>
+            <div class="yinyuan-score" id="yin-score">--</div>
+            <div class="yinyuan-level" id="yin-level">--</div>
+            <div class="yinyuan-advice" id="yin-advice"></div>
+            <button class="btn btn-secondary" onclick="shareResult()">📤 分享结果</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 历史记录 Tab -->
+    <div id="page-history" class="page">
+      <div class="header" style="padding:20px 0;">
+        <div class="title" style="font-size:22px;">📜 历史记录</div>
+      </div>
+      <div id="history-list">
+        <div style="text-align:center; padding:40px; color:#666;">暂无记录</div>
+      </div>
+    </div>
+    
+    <!-- 个人中心 Tab -->
+    <div id="page-profile" class="page">
+      <div class="header" style="padding:20px 0;">
+        <div class="title" style="font-size:22px;">👤 个人中心</div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-avatar">🏛️</div>
+        <div style="font-size:18px; color:#FFD700; margin-bottom:4px;" id="profile-name">天命阁用户</div>
+        <div class="profile-level">Lv.<span id="profile-level">1</span> · 初识</div>
+      </div>
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value" id="profile-free">3</div>
+          <div class="stat-label">免费次数</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="profile-invite">0</div>
+          <div class="stat-label">邀请人数</div>
+        </div>
+      </div>
+      <div class="invite-banner">
+        <div class="invite-title">🎁 邀请有礼</div>
+        <div class="invite-desc">每邀请1位新用户，解锁+3次免费算命</div>
+        <button class="btn btn-primary" onclick="showInvite()">立即邀请</button>
+      </div>
+      <div class="fortune-card" style="margin-top:10px;">
+        <div style="color:#888; font-size:13px; line-height:1.8;">
+          <div style="color:#FFD700; margin-bottom:8px;">🏛️ 天命阁会员权益</div>
+          Lv.1 初识：每日3次免费<br>
+          Lv.2 有缘：每日5次+高级体验<br>
+          Lv.3 知命：每日8次+姻缘5折<br>
+          Lv.4 掌运：专属命理师<br>
+          Lv.5 天命：全年免费+线下活动
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <div class="tab-item active" onclick="switchTab('home')">
+        <div class="tab-icon">🏠</div>
+        <div>首页</div>
+      </div>
+      <div class="tab-item" onclick="switchTab('history')">
+        <div class="tab-icon">📜</div>
+        <div>记录</div>
+      </div>
+      <div class="tab-item" onclick="switchTab('profile')">
+        <div class="tab-icon">👤</div>
+        <div>我的</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+    let currentUser = { openid: 'h5_user_' + Date.now(), nickname: '天命用户', level: 1, freeCount: 3, inviteCount: 0 };
+    
+    function switchTab(tab) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+      document.getElementById('page-' + tab).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+    
+    function switchNav(type) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.getElementById('section-bazi').style.display = type === 'bazi' ? 'block' : 'none';
+      document.getElementById('section-yinyuan').style.display = type === 'yinyuan' ? 'block' : 'none';
+    }
+    
+    async function calcBazi() {
+      const name = document.getElementById('bazi-name').value;
+      const gender = document.getElementById('bazi-gender').value;
+      const year = parseInt(document.getElementById('bazi-year').value);
+      const month = parseInt(document.getElementById('bazi-month').value);
+      const day = parseInt(document.getElementById('bazi-day').value);
+      const hour = parseInt(document.getElementById('bazi-hour').value);
+      
+      if (!name || !year || !month || !day || isNaN(hour)) {
+        alert('请填写完整信息');
+        return;
+      }
+      
+      try {
+        const res = await fetch(API_BASE + '/fortune/bazi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, gender, birthYear: year, birthMonth: month, birthDay: day, birthHour: hour, openid: currentUser.openid })
+        });
+        const data = await res.json();
+        if (data.code === 0) {
+          showBaziResult(data.data);
+        } else {
+          alert('算命失败: ' + data.message);
+        }
+      } catch (e) {
+        alert('网络错误，请确保后端服务已启动 (localhost:3000)');
+      }
+    }
+    
+    function showBaziResult(result) {
+      document.getElementById('bazi-result').classList.add('active');
+      document.getElementById('res-nianzhu').textContent = result.bazi.nianZhu;
+      document.getElementById('res-yuezhu').textContent = result.bazi.yueZhu;
+      document.getElementById('res-rizhu').textContent = result.bazi.riZhu;
+      document.getElementById('res-shizhu').textContent = result.bazi.shiZhu;
+      const wx = result.bazi.wuxingScores;
+      document.getElementById('wx-mu').textContent = wx.木.toFixed(1);
+      document.getElementById('wx-huo').textContent = wx.火.toFixed(1);
+      document.getElementById('wx-tu').textContent = wx.土.toFixed(1);
+      document.getElementById('wx-jin').textContent = wx.金.toFixed(1);
+      document.getElementById('wx-shui').textContent = wx.水.toFixed(1);
+      
+      const interpDiv = document.getElementById('bazi-interpretations');
+      interpDiv.innerHTML = '';
+      result.interpretations.forEach(item => {
+        interpDiv.innerHTML += '<div class="interpretation"><div class="interpretation-type">' + item.type + '</div><div class="interpretation-text">' + item.content + '</div></div>';
+      });
+      document.getElementById('bazi-result').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    async function calcYinyuan() {
+      const nameA = document.getElementById('yin-a-name').value;
+      const zodiacA = document.getElementById('yin-a-zodiac').value;
+      const nameB = document.getElementById('yin-b-name').value;
+      const zodiacB = document.getElementById('yin-b-zodiac').value;
+      
+      if (!nameA || !nameB) { alert('请填写双方姓名'); return; }
+      
+      try {
+        const res = await fetch(API_BASE + '/fortune/yinyuan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            personA: { name: nameA, zodiac: zodiacA, wuxing: {木:2,火:1,土:1,金:1,水:1} },
+            personB: { name: nameB, zodiac: zodiacB, wuxing: {木:1,火:2,土:1,金:1,水:1} }
+          })
+        });
+        const data = await res.json();
+        if (data.code === 0) {
+          showYinyuanResult(data.data);
+        } else {
+          alert('配对失败: ' + data.message);
+        }
+      } catch (e) {
+        alert('网络错误，请确保后端服务已启动');
+      }
+    }
+    
+    function showYinyuanResult(result) {
+      document.getElementById('yinyuan-result').classList.add('active');
+      document.getElementById('yin-score').textContent = result.total;
+      document.getElementById('yin-level').textContent = '「' + result.level + '」';
+      const advice = result.details.map(d => d.desc).join('<br>');
+      document.getElementById('yin-advice').innerHTML = '<strong>详细分析：</strong><br>' + advice + '<br><br><strong>建议：</strong>' + result.advice;
+      document.getElementById('yinyuan-result').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function shareResult() {
+      alert('请截图分享给朋友，或点击右上角分享');
+    }
+    
+    function showInvite() {
+      alert('邀请功能：复制下方链接发送给朋友\n\nhttps://tianming.app/invite?inviter=' + currentUser.openid);
+    }
+    
+    // 页面加载时显示首页
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('天命阁 H5 前端已加载');
+    });
+  </script>
+</body>
+</html>

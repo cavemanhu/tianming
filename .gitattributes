@@ -1,0 +1,12 @@
+# Set line endings for cross-platform compatibility
+* text=auto
+
+# Binary files
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+
+# SQLite database (don't diff, but track)
+*.db binary

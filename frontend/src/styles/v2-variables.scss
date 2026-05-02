@@ -1,0 +1,127 @@
+/**
+ * 天命阁 v2.0 - 新中式设计规范
+ * 天命阁 - 融合传统文化与现代美学
+ */
+
+// ==================== 色彩系统 ====================
+$bg-primary: #0A0A14;        // 深墨色背景
+$bg-secondary: #141428;       // 水墨蓝背景
+$bg-card: #1C1C35;           // 夜色蓝卡片
+$bg-card-hover: #252545;     // 卡片悬浮
+
+$gold-primary: #D4AF37;       // 古铜金（主金色）
+$gold-accent: #FFD700;       // 亮金色（强调）
+$gold-dim: #B8860B;          // 暗金色（次要）
+
+$text-primary: #F5F5F5;      // 象牙白
+$text-secondary: #A0A0B0;    // 淡灰
+$text-dim: #6B6B80;          // 深灰
+
+// 八卦色彩
+$bagua-qian: #FFD700;        // 乾 - 金色
+$bagua-kun: #8B4513;         // 坤 - 棕色
+$bagua-zhen: #228B22;        // 震 - 绿色
+$bagua-xun: #006400;         // 巽 - 深绿
+$bagua-kan: #0000CD;         // 坎 - 蓝色
+$bagua-li: #DC143C;          // 离 - 红色
+$bagua-gen: #8B0000;         // 艮 - 深红
+$bagua-dui: #FF69B4;         // 兑 - 粉色
+
+// 五行色彩
+$wuxing-jin: #FFD700;        // 金
+$wuxing-mu: #228B22;         // 木
+$wuxing-shui: #0000CD;       // 水
+$wuxing-huo: #DC143C;        // 火
+$wuxing-tu: #8B4513;         // 土
+
+// 功能色
+$success: #4ECDC4;           // 成功色
+$warning: #FF8C42;           // 警告色
+$error: #FF6B6B;             // 错误色
+
+// ==================== 渐变 ====================
+$gradient-ink: linear-gradient(180deg, #2A2A4A 0%, #1A1A30 50%, #0A0A14 100%);
+$gradient-gold: linear-gradient(135deg, #FFD700 0%, #D4AF37 50%, #B8860B 100%);
+$gradient-card: linear-gradient(145deg, rgba(255,215,0,0.05) 0%, rgba(255,255,255,0.02) 100%);
+$gradient-mist: linear-gradient(180deg, rgba(42,42,74,0.8) 0%, rgba(10,10,20,0.95) 100%);
+
+// ==================== 字体 ====================
+$font-display: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', serif;  // 书法标题
+$font-body: 'LXGW WenKai', 'Noto Serif SC', 'Songti SC', serif;  // 宋体正文
+$font-mono: 'JetBrains Mono', 'Fira Code', monospace;  // 等宽数字
+
+// 字号
+$font-size-xs: 12px;
+$font-size-sm: 13px;
+$font-size-base: 15px;
+$font-size-lg: 17px;
+$font-size-xl: 20px;
+$font-size-2xl: 24px;
+$font-size-3xl: 32px;
+$font-size-4xl: 40px;
+
+// ==================== 间距 ====================
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+$spacing-2xl: 24px;
+$spacing-3xl: 32px;
+
+// ==================== 圆角 ====================
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+$radius-full: 9999px;
+
+// ==================== 阴影 ====================
+$shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+$shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+$shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+$shadow-gold: 0 0 20px rgba(255,215,0,0.2);
+$shadow-glow: 0 0 40px rgba(255,215,0,0.15);
+
+// ==================== 动效 ====================
+$duration-fast: 0.15s;
+$duration-base: 0.3s;
+$duration-slow: 0.5s;
+$duration-spin: 2s;
+
+$ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1.000);
+
+// ==================== z-index ====================
+$z-dropdown: 100;
+$z-sticky: 200;
+$z-fixed: 300;
+$z-modal: 400;
+$z-popover: 500;
+
+// ==================== Mixins ====================
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin gold-border {
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+@mixin card-base {
+  background: $bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+}
+
+@mixin ink-gradient {
+  background: $gradient-ink;
+}

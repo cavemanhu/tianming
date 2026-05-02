@@ -1,0 +1,134 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "天命阁",
+        "navigationBarBackgroundColor": "#1A1A2E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/input/index",
+      "style": {
+        "navigationBarTitleText": "信息录入",
+        "navigationBarBackgroundColor": "#1A1A2E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/fortune/index",
+      "style": {
+        "navigationBarTitleText": "命格详情",
+        "navigationBarBackgroundColor": "#1A1A2E",
+        "navigationBarTextStyle": "white",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/history/index",
+      "style": {
+        "navigationBarTitleText": "历史记录",
+        "navigationBarBackgroundColor": "#1A1A2E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "个人中心",
+        "navigationBarBackgroundColor": "#1A1A2E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/share/index",
+      "style": {
+        "navigationBarTitleText": "分享命运",
+        "navigationBarBackgroundColor": "#1A1A2E",
+        "navigationBarTextStyle": "white",
+        "disableScroll": true
+      }
+    },
+    {
+      "path": "pages/invite/index",
+      "style": {
+        "navigationBarTitleText": "邀请好友",
+        "navigationBarBackgroundColor": "#1A1A2E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/callback/index",
+      "style": {
+        "navigationBarTitleText": "邀请绑定",
+        "navigationBarBackgroundColor": "#1A1A2E",
+        "navigationBarTextStyle": "white",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/fatename/index",
+      "style": {
+        "navigationBarTitleText": "宝宝取名",
+        "navigationBarBackgroundColor": "#0A0A14",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/yijing/index",
+      "style": {
+        "navigationBarTitleText": "易经占卜",
+        "navigationBarBackgroundColor": "#0A0A14",
+        "navigationBarTextStyle": "white"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "天命阁",
+    "navigationBarBackgroundColor": "#1A1A2E",
+    "backgroundColor": "#0A0A14",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#6B6B80",
+    "selectedColor": "#FFD700",
+    "backgroundColor": "#1A1A2E",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home-active.png"
+      },
+      {
+        "pagePath": "pages/history/index",
+        "text": "记录",
+        "iconPath": "static/tabs/history.png",
+        "selectedIconPath": "static/tabs/history-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "static/tabs/profile.png",
+        "selectedIconPath": "static/tabs/profile-active.png"
+      }
+    ]
+  },
+  " preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["pages/fortune"]
+    }
+  }
+}

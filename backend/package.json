@@ -1,0 +1,17 @@
+{
+  "name": "tianming-backend",
+  "version": "1.0.0",
+  "description": "天命阁后端API服务",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "init-db": "node scripts/init_db.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  }
+}

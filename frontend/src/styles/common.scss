@@ -1,0 +1,277 @@
+/* 天命阁 - 公共样式 */
+
+/* ==================== 1. 工具类 ==================== */
+.clearfix::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* 单行省略 */
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 多行省略 */
+.ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* 文字截断 */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+}
+
+/* ==================== 2. 布局类 ==================== */
+.container {
+  width: 100%;
+  padding: 0 $page-padding-h;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flex-around {
+  justify-content: space-around;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+/* ==================== 3. 间距类 ==================== */
+.mt-0 { margin-top: 0 !important; }
+.mt-xs { margin-top: $spacing-xs; }
+.mt-sm { margin-top: $spacing-sm; }
+.mt-base { margin-top: $spacing-base; }
+.mt-md { margin-top: $spacing-md; }
+.mt-lg { margin-top: $spacing-lg; }
+.mt-xl { margin-top: $spacing-xl; }
+.mt-xxl { margin-top: $spacing-xxl; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-xs { margin-bottom: $spacing-xs; }
+.mb-sm { margin-bottom: $spacing-sm; }
+.mb-base { margin-bottom: $spacing-base; }
+.mb-md { margin-bottom: $spacing-md; }
+.mb-lg { margin-bottom: $spacing-lg; }
+.mb-xl { margin-bottom: $spacing-xl; }
+
+.pt-0 { padding-top: 0 !important; }
+.pt-base { padding-top: $spacing-base; }
+.pt-md { padding-top: $spacing-md; }
+.pt-lg { padding-top: $spacing-lg; }
+
+.pb-base { padding-bottom: $spacing-base; }
+.pb-md { padding-bottom: $spacing-md; }
+.pb-lg { padding-bottom: $spacing-lg; }
+
+.px-base { padding-left: $page-padding-h; padding-right: $page-padding-h; }
+.py-base { padding-top: $page-padding-v; padding-bottom: $page-padding-v; }
+
+.gap-xs { gap: $spacing-xs; }
+.gap-sm { gap: $spacing-sm; }
+.gap-base { gap: $spacing-base; }
+.gap-md { gap: $spacing-md; }
+.gap-lg { gap: $spacing-lg; }
+
+/* ==================== 4. 文字类 ==================== */
+.text-primary { color: $color-text-primary; }
+.text-secondary { color: $color-text-secondary; }
+.text-tertiary { color: $color-text-tertiary; }
+.text-accent { color: $color-accent; }
+.text-error { color: $color-error; }
+.text-success { color: $color-success; }
+
+.text-xs { font-size: $font-size-xs; }
+.text-sm { font-size: $font-size-sm; }
+.text-base { font-size: $font-size-base; }
+.text-lg { font-size: $font-size-lg; }
+.text-xl { font-size: $font-size-xl; }
+.text-xxl { font-size: $font-size-xxl; }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.font-light { font-weight: $font-weight-light; }
+.font-regular { font-weight: $font-weight-regular; }
+.font-medium { font-weight: $font-weight-medium; }
+.font-semibold { font-weight: $font-weight-semibold; }
+.font-bold { font-weight: $font-weight-bold; }
+
+.line-height-tight { line-height: $line-height-tight; }
+.line-height-normal { line-height: $line-height-normal; }
+.line-height-loose { line-height: $line-height-loose; }
+
+/* ==================== 5. 背景类 ==================== */
+.bg-primary { background-color: $color-bg-primary; }
+.bg-secondary { background-color: $color-bg-secondary; }
+.bg-card { background-color: $color-bg-card; }
+.bg-hover { background-color: $color-bg-hover; }
+
+/* ==================== 6. 边框类 ==================== */
+.border { border: 1rpx solid $color-border; }
+.border-light { border: 1rpx solid $color-border-light; }
+.border-accent { border: 1rpx solid $color-accent; }
+
+.rounded { border-radius: $border-radius-base; }
+.rounded-sm { border-radius: $border-radius-sm; }
+.rounded-lg { border-radius: $border-radius-lg; }
+.rounded-full { border-radius: $border-radius-full; }
+
+/* ==================== 7. 阴影类 ==================== */
+.shadow-sm { box-shadow: $shadow-sm; }
+.shadow-base { box-shadow: $shadow-base; }
+.shadow-lg { box-shadow: $shadow-lg; }
+.shadow-gold { box-shadow: $shadow-glow-gold; }
+
+/* ==================== 8. 动画类 ==================== */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ==================== 9. 分割线 ==================== */
+.divider {
+  height: 1rpx;
+  background: $color-border-light;
+  margin: $spacing-md 0;
+}
+
+.divider-vertical {
+  width: 1rpx;
+  height: 100%;
+  background: $color-border-light;
+}
+
+/* ==================== 10. 安全区域 ==================== */
+.safe-area-top {
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ==================== 11. 页面结构 ==================== */
+.page-header {
+  padding: 80rpx $page-padding-h 32rpx;
+}
+
+.page-content {
+  padding: 0 $page-padding-h;
+}
+
+.page-footer {
+  padding: 32rpx $page-padding-h 120rpx; // 预留TabBar
+}
+
+/* ==================== 12. 状态类 ==================== */
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+/* ==================== 13. 动画定义 ==================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    transform: translateY(30rpx); 
+    opacity: 0; 
+  }
+  to { 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    transform: scale(0.9); 
+    opacity: 0; 
+  }
+  to { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10rpx); }
+}
