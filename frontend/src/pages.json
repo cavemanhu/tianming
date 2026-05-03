@@ -74,6 +74,15 @@
         "navigationBarTextStyle": "white",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/guide/index",
+      "style": {
+        "navigationBarTitleText": "新手引导",
+        "navigationBarBackgroundColor": "#1A1A2E",
+        "navigationBarTextStyle": "white",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {

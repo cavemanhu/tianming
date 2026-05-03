@@ -156,6 +156,7 @@ export default {
   onLoad() {
     this.checkLogin()
     this.loadLatestResult()
+    this.checkGuide()
   },
   
   onShow() {
@@ -178,6 +179,15 @@ export default {
       const cached = uni.getStorageSync('fortune_cache')
       if (cached) {
         this.fortuneStore.currentResult = cached
+      }
+    },
+    
+    checkGuide() {
+      // 检查是否需要显示新手引导
+      const hasSeenGuide = uni.getStorageSync('hasSeenGuide')
+      if (!hasSeenGuide && !this.userStore.isLogin) {
+        // 未登录且未看过引导，跳转到引导页
+        uni.redirectTo({ url: '/pages/guide/index' })
       }
     },
     
