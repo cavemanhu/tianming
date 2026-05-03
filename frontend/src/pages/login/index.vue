@@ -275,67 +275,89 @@ export default {
       this.loginLoading = true
       
       try {
-        // TODO: 调用后端API
-        // const res = await uni.request({
-        //   url: '/api/user/phone-login',
-        //   method: 'POST',
-        //   data: { phone: this.phone, code: this.code }
-        // })
+        // TODO: 后端手机号登录API待实现，当前显示提示
+        uni.showToast({ title: '手机号登录即将上线，请使用微信登录', icon: 'none', duration: 2500 })
         
-        // 模拟登录成功
+        // 临时模拟登录成功（后端实现后可替换）
         setTimeout(() => {
           const mockToken = 'mock_token_' + Date.now()
           const mockUserInfo = {
-            userId: 'user_001',
-            phone: this.phone,
+            id: 'test_001',
             nickname: '命运探索者',
-            avatar: '',
+            phone: this.phone,
+            avatar_url: '',
+            invite_code: 'TM' + Math.random().toString(36).substr(2, 6).toUpperCase(),
+            gems: 100,
             level: 1
           }
-          
-          // 保存登录信息
           getApp().setLoginInfo(mockToken, mockUserInfo)
-          
           uni.showToast({ title: '登录成功', icon: 'success' })
-          
           setTimeout(() => {
             uni.switchTab({ url: '/pages/index/index' })
           }, 1000)
-          
           this.loginLoading = false
         }, 1500)
         
       } catch (e) {
-        this.loginLoading = false
+        console.error('手机号登录失败:', e)
         uni.showToast({ title: '登录失败，请重试', icon: 'none' })
+        this.loginLoading = false
       }
     },
     
     // 微信登录
-    handleWechatLogin() {
+    async handleWechatLogin() {
       // #ifdef MP-WEIXIN
-      uni.getPhoneNumber({
-        provider: 'weixin',
-        success: (res) => {
-          this.wechatLoading = true
-          // TODO: 调用后端API进行微信登录
-          // const { code, iv, encryptedData } = res.detail
-          // await uni.request({
-          //   url: '/api/user/wx-login',
-          //   method: 'POST',
-          //   data: { code, iv, encryptedData }
-          // })
+      this.wechatLoading = true
+      try {
+        // 获取登录code
+        const loginRes = await new Promise((resolve, reject) => {
+          uni.login({
+            provider: 'weixin',
+            success: (res) => resolve(res),
+            fail: reject
+          })
+        })
+        
+        const code = loginRes.code
+        if (!code) {
+          throw new Error('获取微信授权码失败')
+        }
+        
+        // 调用后端API进行微信登录
+        const res = await uni.request({
+          url: '/api/user/login',
+          method: 'POST',
+          data: {
+            code: code,
+            invite_code: getApp().globalData.inviteCode || ''
+          }
+        })
+        
+        const result = res.data
+        if (result.code === 0) {
+          // 登录成功，保存token和用户信息
+          const { token, user, is_new_user } = result.data
+          getApp().setLoginInfo(token, user)
+          
+          if (is_new_user) {
+            uni.showToast({ title: '注册成功', icon: 'success' })
+          } else {
+            uni.showToast({ title: '登录成功', icon: 'success' })
+          }
           
           setTimeout(() => {
-            this.wechatLoading = false
             uni.switchTab({ url: '/pages/index/index' })
-          }, 2000)
-        },
-        fail: (e) => {
-          console.log('微信登录失败:', e)
-          uni.showToast({ title: '微信登录失败', icon: 'none' })
+          }, 1500)
+        } else {
+          uni.showToast({ title: result.message || '登录失败', icon: 'none' })
         }
-      })
+      } catch (e) {
+        console.error('微信登录失败:', e)
+        uni.showToast({ title: e.message || '微信登录失败', icon: 'none' })
+      } finally {
+        this.wechatLoading = false
+      }
       // #endif
       
       // #ifndef MP-WEIXIN
