@@ -94,6 +94,14 @@ async function getInfo(req, res) {
       referrer = await UserModel.findById(user.referrer_id);
     }
 
+    // 获取测算次数统计
+    const db = require('../config/database');
+    const [rows] = await db.query(
+      'SELECT COUNT(*) as predict_count FROM fortune_records WHERE user_id = ?',
+      [user.id]
+    );
+    const predict_count = rows[0]?.predict_count || 0;
+
     res.json(success({
       id: user.id,
       nickname: user.nickname,
@@ -105,7 +113,10 @@ async function getInfo(req, res) {
       level: user.level,
       status: user.status,
       last_login_at: user.last_login_at,
-      created_at: user.created_at
+      created_at: user.created_at,
+      predict_count,
+      invite_count: user.invite_count || 0,
+      free_count: user.free_count || 0
     }));
   } catch (err) {
     console.error('获取用户信息失败:', err);
