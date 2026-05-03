@@ -152,3 +152,20 @@ CREATE TABLE IF NOT EXISTS commission_logs (
   INDEX idx_source_user (source_user_id),
   INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='分账记录表';
+
+-- 8. VIP会员表
+CREATE TABLE IF NOT EXISTS vip_memberships (
+  id            BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id       BIGINT UNSIGNED NOT NULL UNIQUE COMMENT '用户ID',
+  vip_level     TINYINT UNSIGNED DEFAULT 1 COMMENT 'VIP等级:1青铜2白银3黄金',
+  expire_time   DATETIME DEFAULT NULL COMMENT 'VIP到期时间',
+  created_at    DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  
+  INDEX idx_user (user_id),
+  INDEX idx_expire (expire_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='VIP会员表';
+
+ALTER TABLE vip_memberships
+  ADD CONSTRAINT fk_vip_user
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;

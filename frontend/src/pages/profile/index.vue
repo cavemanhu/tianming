@@ -255,7 +255,7 @@ export default {
     },
     
     goToVip() {
-      uni.showToast({ title: 'VIP功能开发中', icon: 'none' })
+      uni.navigateTo({ url: '/pages/vip/index' })
     },
     
     goToSettings() {
