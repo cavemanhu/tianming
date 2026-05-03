@@ -74,6 +74,15 @@
         "navigationBarTextStyle": "white",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/naming/index",
+      "style": {
+        "navigationBarTitleText": "智能取名",
+        "navigationBarBackgroundColor": "#1A1A2E",
+        "navigationBarTextStyle": "white",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {
