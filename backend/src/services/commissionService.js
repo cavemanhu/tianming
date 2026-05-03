@@ -5,6 +5,7 @@
 
 const db = require('../config/database');
 const { query } = require('../config/database');
+const notifyService = require('./notifyService');
 
 // 分账配置
 const COMMISSION_CONFIG = {
@@ -136,8 +137,14 @@ async function addCommission(masterId, amount, sourceUserId, level, bizType) {
     [actualAmount, masterId]
   );
 
-  // 发送通知（可选）
-  // await sendCommissionNotify(masterId, actualAmount, sourceUserId, bizType);
+  // 发送佣金到账通知
+  try {
+    const sourceUser = await db.query('SELECT nickname FROM users WHERE id = ?', [sourceUserId]);
+    const sourceNickname = sourceUser[0]?.nickname || '徒弟';
+    await notifyService.sendCommissionEarnedNotify(masterId, actualAmount, sourceNickname);
+  } catch (notifyErr) {
+    console.error('发送佣金通知失败:', notifyErr);
+  }
 
   return actualAmount;
 }

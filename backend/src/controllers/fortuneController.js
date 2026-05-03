@@ -8,6 +8,7 @@ const asyncTaskService = require('../services/asyncTaskService');
 const baziService = require('../services/baziService');
 const fortuneAnalysisService = require('../services/fortuneAnalysisService');
 const yinyuanService = require('../services/yinyuanService');
+const notifyService = require('../services/notifyService');
 const FortuneRecordModel = require('../models/FortuneRecord');
 
 /**
@@ -109,6 +110,14 @@ async function createTask(req, res) {
         gemsCost: 0,
         fateLevel: result.level >= 4 ? 'great' : result.level >= 2 ? 'good' : 'normal'
       });
+      
+      // 发送任务完成通知
+      try {
+        const fateTypeName = fate_type === 'yinyuan' ? '姻缘配对' : fate_type === 'naming' ? '取名测算' : '年运分析';
+        await notifyService.sendTaskCompleteNotify(ctx.userId, ctx.taskId, fateTypeName);
+      } catch (notifyErr) {
+        console.error('发送通知失败:', notifyErr);
+      }
       
       return result;
     });
