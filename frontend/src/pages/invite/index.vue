@@ -156,17 +156,20 @@
 
 <script>
 import { drawQRCode } from '@/utils/qrcode'
+import { getToken } from '@/utils/auth'
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
 
 export default {
   data() {
     return {
-      inviteCode: 'TM20260425ABC',
+      inviteCode: '',
       isCopied: false,
       
       stats: {
-        invitedCount: 5,
-        usedCount: 3,
-        remainCount: 2
+        invitedCount: 0,
+        usedCount: 0,
+        remainCount: 0
       },
       
       rankList: [
@@ -196,23 +199,59 @@ export default {
   },
   
   methods: {
-    loadInviteData() {
-      // TODO: 从后端获取邀请数据
-      // const res = await get('/api/user/invite')
-      // this.inviteCode = res.data.inviteCode
-      // this.stats = res.data.stats
-      
-      // 模拟获取邀请码
-      const userInfo = uni.getStorageSync('userInfo')
-      if (userInfo) {
-        this.inviteCode = `TM${Date.now().toString(36).toUpperCase()}`
+    async loadInviteData() {
+      try {
+        const token = getToken()
+        if (!token) {
+          this.inviteCode = '未登录'
+          return
+        }
+
+        // 并行获取邀请码和统计数据
+        const [codeRes, statsRes] = await Promise.all([
+          this.request('/api/user/invite-code'),
+          this.request('/api/user/invite-stats')
+        ])
+
+        if (codeRes.code === 0) {
+          this.inviteCode = codeRes.data.invite_code
+        }
+        if (statsRes.code === 0) {
+          this.stats = statsRes.data
+        }
+      } catch (e) {
+        console.error('加载邀请数据失败:', e)
+        this.inviteCode = '加载失败'
       }
+    },
+
+    request(url, options = {}) {
+      return new Promise((resolve, reject) => {
+        uni.request({
+          url: `${BASE_URL}${url}`,
+          header: {
+            'Authorization': `Bearer ${getToken()}`,
+            'Content-Type': 'application/json'
+          },
+          ...options,
+          success: (res) => {
+            if (res.statusCode >= 200 && res.statusCode < 300) {
+              resolve(res.data)
+            } else {
+              reject(new Error(`HTTP ${res.statusCode}`))
+            }
+          },
+          fail: reject
+        })
+      })
     },
     
     drawQRCode() {
       const ctx = uni.createCanvasContext('qrcodeCanvas', this)
       
-      const shareUrl = `https://tianming.com/callback?inviteCode=${this.inviteCode}`
+      const shareUrl = this.inviteCode 
+        ? `https://tianming.com/callback?inviteCode=${this.inviteCode}`
+        : 'https://tianming.com'
       drawQRCode(ctx, shareUrl, 0, 0, 200, {
         backgroundColor: '#ffffff',
         foregroundColor: '#000000'
@@ -220,6 +259,10 @@ export default {
     },
     
     copyInviteCode() {
+      if (!this.inviteCode || this.inviteCode === '未登录' || this.inviteCode === '加载失败') {
+        uni.showToast({ title: '邀请码不可用', icon: 'none' })
+        return
+      }
       uni.setClipboardData({
         data: this.inviteCode,
         success: () => {

@@ -194,6 +194,46 @@ async function getApprentices(req, res) {
 }
 
 /**
+ * 获取邀请统计数据
+ * GET /api/user/invite-stats
+ */
+async function getInviteStats(req, res) {
+  try {
+    const user = await UserModel.findById(req.userId);
+    if (!user) {
+      return res.status(404).json(error(CODE.USER_NOT_EXIST, '用户不存在'));
+    }
+
+    // 获取徒弟数量
+    const apprentices = await UserModel.getApprentices(req.userId, { page: 1, pageSize: 1000 });
+    const invitedCount = apprentices.total;
+
+    // 获取已使用的免费次数（徒弟中已完成测算的人数）
+    const db = require('../config/database');
+    const [usedRows] = await db.query(
+      `SELECT COUNT(DISTINCT fr.user_id) as used_count
+       FROM fortune_records fr
+       INNER JOIN users u ON fr.user_id = u.id
+       WHERE u.referrer_id = ? AND fr.is_free = 1`,
+      [req.userId]
+    );
+    const usedCount = usedRows[0]?.used_count || 0;
+
+    // 剩余免费次数 = 邀请人数 - 已使用人数
+    const remainCount = Math.max(0, invitedCount - usedCount);
+
+    res.json(success({
+      invitedCount,
+      usedCount,
+      remainCount
+    }));
+  } catch (err) {
+    console.error('获取邀请统计失败:', err);
+    res.status(500).json(error(CODE.SERVER_ERROR, '获取邀请统计失败'));
+  }
+}
+
+/**
  * 验证邀请码是否有效
  * GET /api/user/check-invite-code
  */
@@ -230,5 +270,6 @@ module.exports = {
   updateInfo,
   getInviteCode,
   getApprentices,
-  checkInviteCode
+  checkInviteCode,
+  getInviteStats
 };

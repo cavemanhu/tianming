@@ -25,4 +25,7 @@ router.get('/invite-code', authMiddleware, userController.getInviteCode);
 // 获取徒弟列表
 router.get('/apprentices', authMiddleware, userController.getApprentices);
 
+// 获取邀请统计数据
+router.get('/invite-stats', authMiddleware, userController.getInviteStats);
+
 module.exports = router;
