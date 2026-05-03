@@ -32,6 +32,9 @@ export default defineConfig({
     target: 'es2015',
     cssCodeSplit: true,
     minify: 'terser',
+    define: {
+      'process.env.NODE_ENV': JSON.stringify('development')
+    },
     terserOptions: {
       compress: {
         drop_console: true,
