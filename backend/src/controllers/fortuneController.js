@@ -6,6 +6,8 @@ const { success, error, CODE } = require('../utils/response');
 const { generateTaskId } = require('../utils/codeGen');
 const asyncTaskService = require('../services/asyncTaskService');
 const baziService = require('../services/baziService');
+const fortuneAnalysisService = require('../services/fortuneAnalysisService');
+const yinyuanService = require('../services/yinyuanService');
 const FortuneRecordModel = require('../models/FortuneRecord');
 
 /**
@@ -56,22 +58,47 @@ async function createTask(req, res) {
 
     // 注册处理函数
     asyncTaskService.registerHandler('fortune', async (input, ctx) => {
-      const { birth_year, birth_month, birth_day, birth_hour, gender, fate_type } = input;
+      const { birth_year, birth_month, birth_day, birth_hour, gender, fate_type, partner_birth } = input;
       
-      // 调用八字服务计算
-      const bazi = baziService.calculateBazi(birth_year, birth_month, birth_day, birth_hour);
+      let result;
       
-      // 模拟运势分析（实际应调用fortuneAnalysisService）
-      const result = {
-        bazi,
-        score: Math.floor(Math.random() * 30) + 70,
-        level: 3,
-        levelName: '中吉',
-        summary: '流年运势平稳，需要把握时机',
-        wuxing: { jin: 20, mu: 25, shui: 20, huo: 15, tu: 20 },
-        luckyMonth: '三月',
-        unluckyMonth: '九月'
-      };
+      if (fate_type === 'yinyuan' && partner_birth) {
+        // 姻缘配对分析
+        const matchResult = yinyuanService.calculateMatch(
+          { name: '男', gender: 'male', birthYear: birth_year, birthMonth: birth_month, birthDay: birth_day, birthTime: birth_hour || '子时' },
+          { name: '女', gender: 'female', birthYear: partner_birth.year, birthMonth: partner_birth.month, birthDay: partner_birth.day, birthTime: partner_birth.hour || '子时' }
+        );
+        result = {
+          type: 'yinyuan',
+          score: matchResult.score,
+          level: matchResult.level,
+          details: matchResult.details,
+          report: matchResult.report,
+          info: matchResult.info
+        };
+      } else {
+        // 年运分析
+        const yearResult = fortuneAnalysisService.analyzeYearFortune({
+          year: birth_year,
+          month: birth_month,
+          day: birth_day,
+          time: birth_hour || '子时',
+          gender: gender === 1 ? 'male' : 'female'
+        });
+        result = {
+          type: 'bazi',
+          score: yearResult.score,
+          level: yearResult.level,
+          levelName: yearResult.levelName,
+          summary: yearResult.summary,
+          details: yearResult.details,
+          luckyMonth: yearResult.luckyMonth,
+          unluckyMonth: yearResult.unluckyMonth,
+          wuxing: yearResult.wuxing,
+          bazi: yearResult.bazi,
+          monthlyFortunes: yearResult.monthlyFortunes
+        };
+      }
       
       // 保存记录
       await FortuneRecordModel.create({
